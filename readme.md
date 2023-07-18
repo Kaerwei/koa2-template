@@ -60,3 +60,64 @@ app.listen(3000, () => {
 终端使用`node src/main.js`
 
 ![image-20230718200528752](F:/typora-image/image-20230718200528752.png)
+
+
+
+## 三、项目的基本优化
+
+### 1 自动重启服务
+
+安装nodemon工具
+
+```
+npm install nodemon
+```
+
+编写`package.json`
+
+```javascript
+  "scripts": {
+    "dev": "nodemon src/main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+```
+
+运行`npm run dev`启动服务
+
+![image-20230718201538942](F:/typora-image/image-20230718201538942.png)
+
+### 2 读取配置文件
+
+安装`dotenv`，读取跟目中的`.env`文件，将配置写在`process.env`中
+
+```javascript
+npm i dotenv
+```
+
+创建`src/config/config.default.js`
+
+```javascript
+const dotenv = require('dotenv');
+dotenv.config();
+
+// console.log(process.env.APP_PORT);
+module.exports = process.env;
+```
+
+改写`main.js`
+
+```javascript
+const Koa = require('koa');
+// 导入config中的固定数据
+const { APP_PORT } = require('./config/config.default');
+
+const app = new Koa();
+
+app.use((ctx, next) => {
+    ctx.body = 'HELLO WORLD'
+})
+
+app.listen(APP_PORT, () => {
+    console.log(`Server is running on http://127.0.0.1:${APP_PORT}`);
+})
+```
