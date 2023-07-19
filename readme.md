@@ -72,7 +72,7 @@ app.listen(3000, () => {
 安装nodemon工具
 
 ```
-npm install nodemon
+npm install nodemon -D
 ```
 
 编写`package.json`
@@ -245,5 +245,73 @@ class UserController {
 }
 
 module.exports = new UserController();
+```
+
+## 六、解析body
+
+### 1 安装koa-body
+
+git地址：https://github.com/koajs/koa-body
+
+```js
+npm i koa-body
+```
+
+### 2 注册中间件
+
+改写`src/app/index.js`
+
+```js
+const Koa = require('koa');
+const { koaBody } = require('koa-body');
+const userRouter = require('../router/user.route');
+const app = new Koa();
+
+app.use(koaBody());
+app.use(userRouter.routes());
+
+module.exports = app;
+```
+
+### 3 解析请求数据
+
+改写`user.controller.js`文件
+
+```js
+const { createUser } = require('../service/user.service');
+
+class UserController {
+    async register(ctx, next) {
+        // 1.获取数据
+        const { user_name, password } = ctx.request.body;
+        // 2.操作数据库
+        const res = await createUser(user_name, password);
+        // 3.返回结果
+        ctx.body = res;
+    }
+
+    async login(ctx, next) {
+        ctx.body = "登录成功";
+    }
+}
+
+module.exports = new UserController();
+```
+
+### 4 拆分service层
+
+service层主要是做数据库处理的
+
+创建`src/service/user.service.js`文件
+
+```js
+class UserService {
+    async createUser(user_name, password) {
+        // todo 写入数据库
+        return '写入数据库成功!'
+    }
+}
+
+module.exports = new UserService();
 ```
 
