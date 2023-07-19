@@ -315,3 +315,56 @@ class UserService {
 module.exports = new UserService();
 ```
 
+## 七、集成sequelize
+
+Sequelize ORM数据库工具
+
+ORM：对象关系映射
+
+- 数据表映射（对应）一个对象
+- 数据表中的数据库（记录）对应一个对象
+- 数据表字段对应对象的属性
+- 数据表的操作对应对象的方法
+
+中文文档：https://www.sequelize.cn/core-concepts/getting-started
+
+### 1 安装sequelize
+
+```js
+npm i mysql2 sequelize
+```
+
+### 2 连接数据库
+
+创建`src/db/seq.js`文件
+
+```js
+const { Sequelize } = require('sequelize');
+const { MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PWD, MYSQL_DB } = require('../config/config.default');
+
+const seq = new Sequelize(MYSQL_DB, MYSQL_USER, MYSQL_PWD, {
+    host: MYSQL_HOST,
+    dialect: 'mysql',
+});
+
+// seq.authenticate().then(() => {
+//     console.log("数据库连接成功!");
+// }).catch(() => {
+//     console.log("数据库连接失败!");
+// })
+
+module.exports = seq;
+```
+
+### 3 编写配置文件
+
+```
+APP_PORT=8000
+
+MYSQL_HOST = localhost
+MYSQL_PORT = 3306
+MYSQL_USER = root
+MYSQL_PWD = Kaerwei110877552
+MYSQL_DB = koa_ty
+```
+
