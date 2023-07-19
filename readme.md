@@ -411,3 +411,132 @@ const User = sequelize.define('koa_user', {
 User.sync({ force: true })
 ```
 
+## 九、添加User新用户
+
+模型（基础）文档：https://www.sequelize.cn/core-concepts/model-querying-basics
+
+改写`src/service/user.service.js`
+
+```js
+const User = require('../model/user.model');
+
+class UserService {
+    async createUser(user_name, password) {
+        // todo 写入数据库
+        // User.create({
+        //     user_name,
+        //     password
+        // })
+        const res = await User.create({ user_name, password });
+        // console.log(res);
+        return res;
+    }
+}
+
+module.exports = new UserService();
+```
+
+同时改写`src/controller/user.controller.js`
+
+```js
+const { createUser } = require('../service/user.service');
+
+class UserController {
+    async register(ctx, next) {
+        // 1.获取数据
+        const { user_name, password } = ctx.request.body;
+        // 2.操作数据库
+        const res = await createUser(user_name, password);
+        // 3.返回结果
+        ctx.body = {
+            code: 0,
+            message: "用户注册成功",
+            result: {
+                id: res.id,
+                user_name: res.user_name
+            }
+        };
+    }
+
+    async login(ctx, next) {
+        ctx.body = "登录成功";
+    }
+}
+
+module.exports = new UserController();
+```
+
+## 十、错误处理
+
+### 1 合法性
+
+判断所传参数是否合法
+
+改写`src/controller/user.controller.js`
+
+```js
+// 合法性
+if (!user_name || !password) {
+    console.error('用户名或密码为空', ctx.request.body);
+    ctx.status = 400;
+    ctx.body = {
+        code: '10001',
+        message: '用户名或密码为空',
+        result: ''
+    };
+    return;
+}
+```
+
+### 2 合理性
+
+判断逻辑中数据是否符合要求
+
+```js
+// 合理性
+if (await getUserInfo({ user_name, password })) {
+    ctx.status = 409;
+    ctx.body = {
+        code: '10002',
+        message: '用户已经存在',
+        result: ''
+    }
+    return
+}
+```
+
+改写`src/service/user.service.js`
+
+```js
+const User = require('../model/user.model');
+
+class UserService {
+    async createUser(user_name, password) {
+        // todo 写入数据库
+        // User.create({
+        //     user_name,
+        //     password
+        // })
+        const res = await User.create({ user_name, password });
+        // console.log(res);
+        return res;
+    }
+
+    async getUserInfo({ id, user_name, password, is_admin }) {
+        const whereOpt = {};
+        id && Object.assign(whereOpt, { id });
+        user_name && Object.assign(whereOpt, { user_name });
+        password && Object.assign(whereOpt, { password });
+        is_admin && Object.assign(whereOpt, { is_admin });
+
+        const res = await User.findOne({
+            attributes: ['id', 'user_name', 'password', 'is_admin'],
+            where: whereOpt
+        });
+        return res ? res.dataValues : null;
+    }
+}
+
+module.exports = new UserService();
+```
+
