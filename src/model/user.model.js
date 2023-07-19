@@ -31,4 +31,4 @@ const User = sequelize.define('koa_user', {
 // force强制重新创建,创建好后注释掉
 // User.sync({ force: true })
 
-module.exports = User
+module.exports = User;
