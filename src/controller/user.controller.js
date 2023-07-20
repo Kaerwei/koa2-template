@@ -1,43 +1,26 @@
-const { createUser, getUserInfo } = require('../service/user.service');
+const { createUser } = require('../service/user.service');
+const { userRegisterError } = require('../constant/error.type');
 
 class UserController {
     async register(ctx, next) {
         // 1.获取数据
         const { user_name, password } = ctx.request.body;
-
-        // 合法性
-        if (!user_name || !password) {
-            console.error('用户名或密码为空', ctx.request.body);
-            ctx.status = 400;
+        try {
+            // 2.操作数据库
+            const res = await createUser(user_name, password);
+            // 3.返回结果
             ctx.body = {
-                code: '10001',
-                message: '用户名或密码为空',
-                result: ''
+                code: 0,
+                message: "用户注册成功",
+                result: {
+                    id: res.id,
+                    user_name: res.user_name
+                }
             };
-            return;
-        }
-        // 合理性
-        if (awaitgetUserInfo({ user_name, password })) {
-            ctx.status = 409;
-            ctx.body = {
-                code: '10002',
-                message: '用户已经存在',
-                result: ''
-            }
-            return
+        } catch (err) {
+            ctx.app.emit('error', userRegisterError, ctx);
         }
 
-        // 2.操作数据库
-        const res = await createUser(user_name, password);
-        // 3.返回结果
-        ctx.body = {
-            code: 0,
-            message: "用户注册成功",
-            result: {
-                id: res.id,
-                user_name: res.user_name
-            }
-        };
     }
 
     async login(ctx, next) {
