@@ -24,7 +24,9 @@ class UserController {
     }
 
     async login(ctx, next) {
-        ctx.body = "登录成功";
+        const { user_name, password } = ctx.request.body;
+
+        ctx.body = "登录成功," + user_name;
     }
 }
 
