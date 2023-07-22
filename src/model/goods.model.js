@@ -24,7 +24,8 @@ const Goods = sequelize.define('koa_goods', {
         type: DataTypes.STRING,
         allowNull: false,
         comment: '商品图片的url'
-    }
+    },
+
 }, {
     // 这是其他模型参数
     timestamps: true

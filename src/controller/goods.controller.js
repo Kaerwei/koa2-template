@@ -1,6 +1,6 @@
 const path = require('path');
 
-const { createGoods, updateGoods } = require('../service/goods.service');
+const { createGoods, updateGoods, removeGoods } = require('../service/goods.service');
 
 const {
     fileUploadError,
@@ -60,6 +60,15 @@ class GoodsController {
             }
         } catch (err) {
             console.error(err);
+        }
+    }
+
+    async remove(ctx) {
+        await removeGoods(ctx.params.id);
+        ctx.body = {
+            code: 0,
+            message: '删除商品成功！',
+            result: ''
         }
     }
 }
