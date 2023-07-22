@@ -63,5 +63,10 @@ module.exports = {
         code: '10204',
         message: '商品发布失败',
         result: ''
+    },
+    invalidGoodsID: {
+        code: '10205',
+        message: '商品编码不存在',
+        result: ''
     }
 }

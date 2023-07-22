@@ -5,6 +5,11 @@ class GoodsService {
         const res = await Goods.create(goods);
         return res.dataValues;
     }
+
+    async updateGoods(id, goods) {
+        const res = await Goods.update(goods, { where: { id } });
+        return res[0] > 0
+    }
 }
 
 module.exports = new GoodsService();
