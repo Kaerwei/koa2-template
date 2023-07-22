@@ -27,8 +27,8 @@ const Goods = sequelize.define('koa_goods', {
     },
 
 }, {
-    // 这是其他模型参数
-    timestamps: true
+    timestamps: true,
+    paranoid: true
 });
 
 // Goods.sync({ force: true });

@@ -54,6 +54,7 @@ class UserController {
         console.log(id, password);
         // 2.更新数据库
         if (await updateById({ id, password })) {
+            // 3.返回结果
             ctx.body = {
                 code: 0,
                 message: '修改密码成功',
@@ -66,7 +67,6 @@ class UserController {
                 result: ''
             }
         }
-        // 3.返回结果
     }
 }
 

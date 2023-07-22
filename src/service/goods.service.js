@@ -13,7 +13,12 @@ class GoodsService {
 
     async removeGoods(id) {
         const res = await Goods.destroy({ where: { id } })
-        return res[0] > 0
+        return res > 0
+    }
+
+    async restoreGoods(id) {
+        const res = await Goods.restore({ where: { id } });
+        return res > 0
     }
 }
 
