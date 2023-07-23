@@ -4,7 +4,8 @@ const {
     create,
     update,
     remove,
-    restore
+    restore,
+    findAll
 } = require('../controller/goods.controller');
 
 const { auth, hadAdminPermission } = require('../middleware/auth.middleware');
@@ -29,5 +30,7 @@ router.post('/:id/off', auth, hadAdminPermission, remove);
 // 软删除接口（上架)
 router.post('/:id/on', auth, hadAdminPermission, restore);
 
+// 获取商品列表
+router.get('/', findAll);
 module.exports = router;
 
