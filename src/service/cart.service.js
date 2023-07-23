@@ -1,11 +1,27 @@
+const { Op } = require('sequelize');
+const Carts = require('../model/cart.model');
+
 class CartService {
     async createOrUpdate(user_id, goods_id) {
-        return {
-            user_id,
-            goods_id,
-            number: 1,
-            selected: true
+        // 根据user_id和goods_id同时查找,有没有记录
+        let res = await Carts.findOne({
+            where: {
+                [Op.and]: {
+                    user_id, goods_id
+                }
+            }
+        });
+        if (res) {
+            // 已经存在一条记录
+            await res.increment('number');
+            return await res.reload()
+        } else {
+            return await Carts.create({
+                user_id,
+                goods_id
+            })
         }
+
     }
 }
 
