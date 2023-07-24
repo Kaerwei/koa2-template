@@ -55,7 +55,7 @@ class CartService {
     }
 
     async removeCarts(ids) {
-        return await CartService.destory({
+        return await Carts.destroy({
             where: {
                 id: {
                     [Op.in]: ids
