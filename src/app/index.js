@@ -16,8 +16,9 @@ app.use(koaBody({
         // 在配置选项option中不推荐使用相对地址
         // 在option里的相对路径, 不是相对的当前文件, 相对process.cwd()
         uploadDir: path.join(__dirname, '../upload'),
-        keepExtensions: true
-    }
+        keepExtensions: true,
+    },
+    parsedMethods: ['POST', 'PUT', 'PATCH', 'DELETE']
 }));
 app.use(KoaStatic(path.join(__dirname, '../upload')));
 app.use(parameter(app));

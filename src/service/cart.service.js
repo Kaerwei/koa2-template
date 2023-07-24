@@ -53,6 +53,16 @@ class CartService {
 
         return await res.save()
     }
+
+    async removeCarts(ids) {
+        return await CartService.destory({
+            where: {
+                id: {
+                    [Op.in]: ids
+                }
+            }
+        })
+    }
 }
 
 module.exports = new CartService();
