@@ -42,6 +42,17 @@ class CartService {
             list: rows
         }
     }
+
+    async updateCarts(params) {
+        const { id, number, selected } = params;
+        const res = await Carts.findByPk(id);
+        if (!res) return '';
+
+        number !== undefined ? (res.number = number) : '';
+        selected !== undefined ? (res.selected = selected) : '';
+
+        return await res.save()
+    }
 }
 
 module.exports = new CartService();
