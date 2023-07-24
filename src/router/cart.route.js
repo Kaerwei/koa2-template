@@ -1,7 +1,7 @@
 // 1.导入koa-router
 const Router = require('koa-router');
 
-const { add, findAll, update, remove } = require('../controller/cart.controller');
+const { add, findAll, update, remove, selectAll, unselectAll } = require('../controller/cart.controller');
 
 const { auth } = require('../middleware/auth.middleware');
 const { validator } = require('../middleware/cart.middleware');
@@ -23,6 +23,8 @@ router.delete('/',
     auth,
     validator({ ids: { type: 'array' } }),
     remove);
+router.post('/selectAll', auth, selectAll);
+router.post('/unselectAll', auth, unselectAll);
 
 // 4.导出router对象
 module.exports = router;

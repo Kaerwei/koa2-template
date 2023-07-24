@@ -10,6 +10,8 @@ const errorHandler = require('../app/errorHandler');
 
 const app = new Koa();
 
+app.use(require('koa-logger')());
+
 app.use(koaBody({
     multipart: true,
     formidable: {

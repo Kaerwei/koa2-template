@@ -63,6 +63,22 @@ class CartService {
             }
         })
     }
+
+    async selectAllCarts(user_id) {
+        return await Carts.update({ selected: true }, {
+            where: {
+                user_id
+            }
+        })
+    }
+
+    async unselectAllCarts(user_id) {
+        return await Carts.update({ selected: false }, {
+            where: {
+                user_id
+            }
+        })
+    }
 }
 
 module.exports = new CartService();
