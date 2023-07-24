@@ -32,6 +32,9 @@ const Carts = sequelize.define('koa_carts', {
 
 // 3.同步数据(建表)
 // Carts.sync({ force: true });
-
+const Goods = require('./goods.model');
+Carts.belongsTo(Goods, {
+    foreignKey: 'goods_id'
+});
 // 4.导出Cart模型
 module.exports = Carts;
